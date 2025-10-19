@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase/firebase.init";
 import { IoMdEye } from "react-icons/io";
@@ -43,6 +46,9 @@ const Register = () => {
         console.log("User registered:", userCredential.user);
         setSuccess(true);
         event.target.reset();
+        sendEmailVerification(userCredential.user).then(() => {
+          alert("Please login to your email and verify your email address.");
+        });
       })
       .catch((error) => {
         console.log("Error during registration:", error);
