@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase/firebase.init";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
+import { Link } from "react-router";
 
 const Register = () => {
   const [success, setSuccess] = useState(false);
@@ -13,7 +14,8 @@ const Register = () => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log("Form submitted", email, password);
+    const termsAccepted = event.target.terms.checked;
+    console.log("Form submitted", email, password, termsAccepted);
 
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*]).{6,}$/;
     const casePattern = /[a-z]/;
@@ -25,6 +27,10 @@ const Register = () => {
       return;
     } else if (!casePattern.test(password)) {
       setError("Password must contain at least one lowercase letter.");
+      return;
+    }
+    if (!termsAccepted) {
+      setError("You must accept the Terms & Conditions to register.");
       return;
     }
 
@@ -51,11 +57,10 @@ const Register = () => {
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Register now!</h1>
-        </div>
+        <div className="text-center lg:text-left"></div>
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
+            <h2 className="text-3xl m-auto font-bold">Register now!</h2>
             <form onSubmit={handleRegister}>
               <fieldset className="fieldset">
                 <label className="label">Email</label>
@@ -81,8 +86,8 @@ const Register = () => {
                   </button>
                 </div>
                 <label className="label">
-                  <input type="checkbox" className="checkbox" />
-                  Remember me
+                  <input type="checkbox" name="terms" className="checkbox" />
+                  Accept Terms & Conditions
                 </label>
                 <div>
                   <a className="link link-hover">Forgot password?</a>
@@ -96,6 +101,12 @@ const Register = () => {
               )}
               {error && <p className="text-red-700 mt-2">{error}</p>}
             </form>
+            <p>
+              Already have an account? Please{" "}
+              <Link className="text-blue-600 underline" to="/login">
+                Login
+              </Link>
+            </p>
           </div>
         </div>
       </div>
